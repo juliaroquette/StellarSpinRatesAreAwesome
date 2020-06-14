@@ -1,7 +1,6 @@
 # Stellar Spin Rates Are Awesome
 
-
-I built this package that allows anyone to load and manipulate datasets of spin rates for low-mass stars.
+This package that allows anyone to load and manipulate datasets of spin rates of low-mass stars.
 
 This initial version contains datasets for the following clusters:
 NGC2264
