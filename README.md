@@ -1,4 +1,4 @@
-# StellarSpinRatesAreAwesome
+# Stellar Spin Rates Are Awesome
 
 
 I built this package that allows anyone to load and manipulate datasets of spin rates for low-mass stars.
