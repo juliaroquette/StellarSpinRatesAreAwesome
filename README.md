@@ -4,40 +4,40 @@ This package that allows anyone to load and manipulate datasets of spin rates of
 
 This initial version contains datasets for the following clusters:
 
-NGC2264
+- NGC2264
 
-UpperSco
+- UpperSco
 
-hPer
+- hPer
 
 I will soon include the following other clusters (tables and literature review are ready, just need formating):
 
-NGC 6530
+- NGC 6530
 
-ONC
+- ONC
 
-CepOB3b
+- CepOB3b
 
-Orion OB1
+- Orion OB1
 
-Orion OB1a
+- Orion OB1a
 
-Orion OB1b
+- Orion OB1b
 
-25 Ori
+- 25 Ori
 
-Rho Oph
+- Rho Oph
 
-NGC 2362
+- NGC 2362
 
 
 In the future I will also include:
 
-Cygnus OB2
+- Cygnus OB2
 
-Taurus
+- Taurus
 
-older clusters and the Kepler Field.
+- older clusters and the Kepler Field.
 
 You can load the data for a cluster by doing:
 
