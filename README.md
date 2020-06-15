@@ -3,8 +3,11 @@
 This package that allows anyone to load and manipulate datasets of spin rates of low-mass stars.
 
 This initial version contains datasets for the following clusters:
+
 NGC2264
+
 UpperSco
+
 hPer
 
 I will soon include the following other clusters (tables and literature review are ready, just need formating):
