@@ -12,6 +12,7 @@ low mass stars.
 The package currently includes the following regions:
     - hPer
     - NGC2264
+    - hPer
 
 Last Update: 14 June 2020
 """
@@ -22,6 +23,7 @@ from astropy.table import Table
 import MacOSFile
 
 print('Version 0 - LAST UPDATE 14 June 2020')
+print('Package currently contains: hPer, NGC2264 and hPer ')
 class hPer:
     """
     hPer database 
@@ -59,7 +61,10 @@ class hPer:
         self.SpT=self.data['SpectralType']
         self.EBV_i=self.data['E_B-V_']
         self.cat= ac.SkyCoord(self.RA,self.Dec, unit="deg")  
-#        self.hasSpinRate=np.argwhere(np.isfinite(self.Prot)).transpose()[0]
+        print('PS1 for PanSTARRs DR2 stacked data')
+        print('TwoMASS for 2MASS data')     
+        print('OriginalPhotometry for VIc, and i_cfht data')
+        print('ClusterInfo forgeneral info about the cluster')
     def OriginalPhotometry(self):
         self.V=self.data['Vmag']
         self.Ic=self.data['Icmag']
@@ -133,6 +138,10 @@ class NGC2264:
         self.AV=self.data['Av_V14']
         self.SpT=self.data['spt_V14']    
         self.Disk=self.data['Disked']
+        print('PS1 for PanSTARRs DR2 stacked data')
+        print('TwoMASS for 2MASS data')       
+        print('ClusterInfo forgeneral info about the cluster')
+        
     def PS1(self):
         self.g=self.data['gPSFMag']
         self.g_e=self.data['gPSFMagErr']
@@ -197,6 +206,9 @@ class USco:
         self.EBV=self.data['E_B-V']
         self.Disk=self.data['Disked']
         self.SpT=np.nan        
+        print('PS1 for PanSTARRs DR2 stacked data')
+        print('TwoMASS for 2MASS data')       
+        print('ClusterInfo forgeneral info about the cluster')
     def PS1(self):
         self.g=self.data['gPSFMag']
         self.g_e=self.data['gPSFMagErr']
