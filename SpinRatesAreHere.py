@@ -17,7 +17,6 @@ The package currently includes the following regions:
 Last Update: 14 June 2020
 """
 import numpy as np
-import ruculatools as rt
 import astropy.coordinates as ac
 from astropy.table import Table
 import MacOSFile
@@ -88,7 +87,7 @@ class hPer:
         cluster_info=MacOSFile.pickle_load(datadir+'hPer_ClusterInfo.npy')
         print('Distance from Gaia DR2 -',cluster_info['Gaia_distance_ref'])
         self.dist=cluster_info['Gaia_distance']
-        self.DM=rt.DisttoDM(self.dist)
+        self.DM=5*np.log10(self.dist/10)
         print(self.dist,' pc, DM= ',self.DM)        
         print('Median E(B-V) from Currie et al. 2010')
         print(cluster_info['comment_AV'])
@@ -165,7 +164,7 @@ class NGC2264:
         cluster_info=MacOSFile.pickle_load(datadir+'NGC2264_ClusterInfo.npy')
         print('Distance from Gaia DR2 -',cluster_info['Gaia_distance_ref'])
         self.dist=cluster_info['Gaia_distance']
-        self.DM=rt.DisttoDM(self.dist)
+        self.DM=5.*np.log10(self.dist/10.)
         print(cluster_info['comment_AV'])
         self.Av=cluster_info['Av']
         print(self.Av)
@@ -233,7 +232,7 @@ class USco:
         print('Distance from Gaia DR2 -',cluster_info['Gaia_distance_ref'])
         print(cluster_info['Gaia_distance_comment'])
         self.dist=cluster_info['Gaia_distance']
-        self.DM=rt.DisttoDM(self.dist)
+        self.DM=5.*np.log10(self.dist/10)
         print(cluster_info['comment_EBV'])
         self.EBV=self.luster_info['ref_EBV']
         self.Rv=3.1
