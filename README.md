@@ -6,6 +6,8 @@ This initial version contains datasets for the following clusters:
 
 - NGC2264
 
+- NGC2362
+
 - UpperSco
 
 - hPer
@@ -27,8 +29,6 @@ I will soon include the following other clusters (tables and literature review a
 - 25 Ori
 
 - Rho Oph
-
-- NGC 2362
 
 
 In the future I will also include:
