@@ -12,7 +12,8 @@ low mass stars.
 The package currently includes the following regions:
     - hPer
     - NGC2264
-    - hPer
+    - NGC2362
+    - USco
 
 Last Update: 14 June 2020
 """
@@ -21,8 +22,9 @@ import astropy.coordinates as ac
 from astropy.table import Table
 import MacOSFile
 
-print('Version 0 - LAST UPDATE 14 June 2020')
-print('Package currently contains: hPer, NGC2264 and hPer ')
+print('Version 0 - LAST UPDATE 16 June 2020')
+print('Package currently contains: hPer, NGC2264, NGC2362 and USco')
+print('Disk is >0 if star is known to have a disk, <0 if the star is is known diskless and =0 if unkown')
 class hPer:
     """
     hPer database 
@@ -56,9 +58,10 @@ class hPer:
         elif mass_type==2:
             print('Using B98 masses with median extinction')
             self.Mass=self.data['Mass_B98_median'] 
+        self.Mass[self.Mass<=0.]=np.nan    
         self.Amp=self.data['Amp'] 
         self.SpT=self.data['SpectralType']
-        self.EBV_i=self.data['E_B-V_']
+        self.EBV=self.data['E_B-V_']
         self.cat= ac.SkyCoord(self.RA,self.Dec, unit="deg")  
         print('PS1 for PanSTARRs DR2 stacked data')
         print('TwoMASS for 2MASS data')     
@@ -133,7 +136,8 @@ class NGC2264:
         elif mass_type==1:
             self.Mass=self.data['Mass_MESA_mixed']
         elif mass_type==2:
-            self.Mass=self.data['Mass_B98_mixed']            
+            self.Mass=self.data['Mass_B98_mixed']         
+        self.Mass[self.Mass<=0.]=np.nan 
         self.AV=self.data['Av_V14']
         self.SpT=self.data['spt_V14']    
         self.Disk=self.data['Disked']
@@ -152,7 +156,6 @@ class NGC2264:
         self.z_e=self.data['zPSFMagErr']
         self.y=self.data['yPSFMag']
         self.y_e=self.data['yPSFMagErr']  
-        self.cat= ac.SkyCoord(self.data['raStack'],self.data['decStack'], unit="deg")     
     def TwoMASS(self):            
         self.Jmag=self.data['j_m']
         self.Jmag_e=self.data['j_cmsig']
@@ -166,7 +169,7 @@ class NGC2264:
         self.dist=cluster_info['Gaia_distance']
         self.DM=5.*np.log10(self.dist/10.)
         print(cluster_info['comment_AV'])
-        self.Av=cluster_info['Av']
+        self.Av=cluster_info['AV']
         print(self.Av)
         self.EBV=self.Av/3.1
         print('Age adopted by Venuti+2017')
@@ -185,13 +188,14 @@ class USco:
     mass_type = 0 source paper mass
                 1 MESA with individual extinction: from J, iPS1 or H
                 2 Baraffe+98 wmixed with individual extinction: from J, iPS1 or H
-    LAST UPDATE: 14 June 2020
+    LAST UPDATE: 
+        16 June 2020 - Updated RA,Dec from hms/dms to deg
                 
     """
-    def __init__(self,filename='Usco_P_M_updated_14_Jun_2020.fit',datadir='tables/',mass_type=1):
+    def __init__(self,filename='USco_P_M_updated_16_Jun_2020.fit',datadir='tables/',mass_type=1):
         print('Reference table is 1. Rebull et al. 2018')
         self.data=Table.read(datadir+filename, format='fits') 
-        print('Loading data,RA,Dec,Prot,Mass,Amp,SpT,Av,Disk')
+        print('Loading data,RA,Dec,Prot,Mass,EBV,Disk')
         self.RA=self.data['RAJ2000']
         self.Dec=self.data['DEJ2000']
         self.Prot=self.data['Per1']
@@ -201,7 +205,8 @@ class USco:
         elif mass_type==1:
             self.Mass=self.data['Mass_MESA']
         elif mass_type==2:
-            self.Mass=self.data['Mass_B98']            
+            self.Mass=self.data['Mass_B98']      
+        self.Mass[self.Mass<=0.]=np.nan 
         self.EBV=self.data['E_B-V']
         self.Disk=self.data['Disked']
         self.SpT=np.nan        
@@ -219,7 +224,6 @@ class USco:
         self.z_e=self.data['zPSFMagErr']
         self.y=self.data['yPSFMag']
         self.y_e=self.data['yPSFMagErr']  
-        self.cat= ac.SkyCoord(self.data['raStack'],self.data['decStack'], unit="deg")     
     def TwoMASS(self):            
         self.Jmag=self.data['j_m']
         self.Jmag_e=self.data['j_cmsig']
@@ -242,4 +246,88 @@ class USco:
         self.Age=cluster_info['Age']
         print(cluster_info['FeH_ref'])
         self.FeH=cluster_info['FeH']
-                                      
+        
+class NGC2362:
+    """
+    Reference table:
+        Irwin et al. 2008 http://vizier.u-strasbg.fr/viz-bin/VizieR?-source=J/MNRAS/384/675
+
+
+    Reference for disks: Julia updated it using:
+                            1- If MYStIX IR-excess
+                            2- If [3.6]-[8.0]>0.7 (same criteria as in Irwin+2008)
+    References for Mass: Median Extinction Masses  
+    
+    mass_type = 0 source paper mass
+                1 MESA with individual extinction: from J, iPS1 or H
+                2 Baraffe+98 wmixed with individual extinction: from J, iPS1 or H
+    LAST UPDATE: 16 June 2020
+                
+    """
+    def __init__(self,filename='NGC2362_P_M_updated_16_Jun_2020.fit',datadir='tables/',mass_type=0):
+        print('Reference table is 1. Irwin et al. 2008')
+        self.data=Table.read(datadir+filename, format='fits') 
+        print('Loading data,RA,Dec,Prot,Mass,Amp,Disk')
+        self.RA=self.data['RAJ2000_1']
+        self.Dec=self.data['DEJ2000_2']
+        self.Prot=self.data['Per']
+        self.Amp=self.data['iamp']
+        if mass_type==0:
+            self.Mass=self.data['Mass']
+        elif mass_type==1:
+            self.Mass=self.data['Mass_median_MESA']
+        elif mass_type==2:
+            self.Mass=self.data['Mass_median_B98']      
+        self.Mass[self.Mass<=0.]=np.nan 
+        self.Disk=self.data['Disked']       
+        print('PS1 for PanSTARRs DR2 stacked data')
+        print('TwoMASS for 2MASS data')       
+        print('ClusterInfo forgeneral info about the cluster')
+    def PS1(self):
+        self.g=self.data['gPSFMag']
+        self.g_e=self.data['gPSFMagErr']
+        self.r=self.data['rPSFMag']
+        self.r_e=self.data['rPSFMagErr']
+        self.i=self.data['iPSFMag']
+        self.i_e=self.data['iPSFMagErr']
+        self.z=self.data['zPSFMag']
+        self.z_e=self.data['zPSFMagErr']
+        self.y=self.data['yPSFMag']
+        self.y_e=self.data['yPSFMagErr']  
+    def TwoMASS(self):            
+        self.Jmag=self.data['_Jmag_']
+        self.Jmag_e=self.data['e_Jmag_']
+        self.Hmag=self.data['_Hmag_']
+        self.Hmag_e=self.data['e_Hmag_']
+        self.Ksmag=self.data['_Ksmag_']
+        self.Ksmag_e=self.data['e_Ksmag_']
+    def Spitzer(self):
+        self._3_6_=self.data['_3_6_']
+        self._4_5_=self.data['_4_5_']
+        self._5_8_=self.data['_5_8_']
+        self._8_0_=self.data['_8_0_'] 
+        self._24_=self.data[ '_24_']
+        self.e_3_6_=self.data[ 'e_3_6_'] 
+        self.e_4_5_=self.data[ 'e_4_5_']
+        self.e_5_8_=self.data['e_5_8_'] 
+        self.e_8_0_=self.data['e_8_0_'] 
+        self.e_24_=self.data['e_24_']
+    def ClusterInfo(self,datadir='tables/'):
+        cluster_info=MacOSFile.pickle_load(datadir+'NGC2362_ClusterInfo.npy')
+        print('Distance from Gaia DR2 -',cluster_info['Gaia_distance_ref'])
+        self.dist=cluster_info['Gaia_distance']
+        self.DM=5.*np.log10(self.dist/10)
+        print(cluster_info['comment_AV'])
+        self.EBV=cluster_info['ref_EBV']
+        print('E(B-V)=',self.EBV)
+        self.Rv=3.1
+        self.Av=self.Rv*self.EBV
+        print('Av=',self.Av)
+        print('Old Literature Age adopted')
+        self.Age=cluster_info['Age']
+        print(self.Age)        
+        print(cluster_info['FeH_ref'])
+        self.FeH=cluster_info['FeH']
+        
+        
+        
