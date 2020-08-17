@@ -4,6 +4,8 @@ This package allows anyone to load and manipulate datasets of spin rates of low-
 
 This initial version contains datasets for the following clusters:
 
+- NGC6530
+
 - NGC2264
 
 - NGC2362
@@ -14,7 +16,6 @@ This initial version contains datasets for the following clusters:
 
 I will soon include the following other clusters (tables and literature review are ready, just need formating):
 
-- NGC 6530
 
 - ONC
 
