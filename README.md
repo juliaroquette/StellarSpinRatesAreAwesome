@@ -1,6 +1,10 @@
 # Stellar Spin Rates Are Awesome
 
-This package allows anyone to load and manipulate datasets of spin rates of low-mass stars.
+This package includes routines and notes from my research on the spin evolution of low mass stars. 
+
+The jupyter-notebook `SpinEvolutionModel.ipynb` contains my research notes on the implementation  Matt et al. 2015 spin evolution model along with modifications I added to it in order to include the rotational evolution during the early pre-Main Sequence. 
+
+The package `SpinRatesAreHere.py` allows anyone to load and manipulate datasets of spin rates of low-mass stars.
 
 This initial version contains datasets for the following clusters:
 
