@@ -15,8 +15,11 @@ The package currently includes the following regions:
     - NGC2362
     - USco
     - NGC 6530
+    - Pleiades
+    - Praesepe
+    - NGC 6811
 
-Last Update: 17 August 2020
+Last Update: 2nd December 2020
 """
 import numpy as np
 import astropy.coordinates as ac
@@ -41,9 +44,12 @@ class hPer:
         mass_type = 0 source paper mass
                     1 MESA with median extinction
                     2 Baraffe+98 with median extinction
-    LAST UPDATE: 14 June 2020
+                    3 Baraffe+15 with median extinction
+    LAST UPDATE: 
+        2nd December 2020 - Added Baraffe+15 masses
+        14 June 2020
     """
-    def __init__(self,filename='hPer_P_m_updated_14_Jun_2020.fit',datadir='tables/',mass_type=0):
+    def __init__(self,filename='hPer_P_M_updated_02_Dec_2020.fit',datadir='/Users/jroquette/work/prog/python/StellarSpinRatesAreAWESoME/tables/',mass_type=0):
         print('Loading data,RA,Dec,Prot,Mass,Amp,SpT,EBV')
         print('This table had binary stars removed following the flags in Moraux et al. 2013')
         self.data=Table.read(datadir+filename, format='fits') 
@@ -59,6 +65,9 @@ class hPer:
         elif mass_type==2:
             print('Using B98 masses with median extinction')
             self.Mass=self.data['Mass_B98_median'] 
+        elif mass_type==3:
+            print('Using B15 masses with median extinction')
+            self.Mass=self.data['Mass_B15_median']             
         self.Mass[self.Mass<=0.]=np.nan    
         self.Amp=self.data['Amp'] 
         self.SpT=self.data['SpectralType']
@@ -120,11 +129,15 @@ class NGC2264:
     
     mass_type = 0 source paper mass
                 1 MESA with mixed - comes either from Teff-Mass or from J or iband
-                2 Baraffe+98 wmixed - comes either from Teff-Mass or from J or iband
-    LAST UPDATE: 14 June 2020
+                2 Baraffe+98 mixed - comes either from Teff-Mass or from J or iband
+                3 Baraffe+15 - Teff-Mass
+    LAST UPDATE: 
+        2nd December 2020: boths 0 and 3 are only for Vanuti+17 periods
+        
+        14 June 2020
                 
     """
-    def __init__(self,filename='NGC2264_P_M_updated_14_Jun_2020.fit',datadir='tables/',mass_type=0):
+    def __init__(self,filename='NGC2264_P_M_updated_02_Dec_2020.fit',datadir='/Users/jroquette/work/prog/python/StellarSpinRatesAreAWESoME/tables/',mass_type=0):
         print('Reference table is 1. Venuti et al. 2017, or 2. Affer et al. 2013, or 3. Cieza et al. 2007, or 4. Lamm et al., or 5. Makidon et al. 2004')
         self.data=Table.read(datadir+filename, format='fits') 
         print('Loading data,RA,Dec,Prot,Mass,Amp,SpT,Av,Disk')
@@ -137,7 +150,9 @@ class NGC2264:
         elif mass_type==1:
             self.Mass=self.data['Mass_MESA_mixed']
         elif mass_type==2:
-            self.Mass=self.data['Mass_B98_mixed']         
+            self.Mass=self.data['Mass_B98_mixed']       
+        elif mass_type==3:
+            self.Mass=self.data['Mass_Teff_B15_solar_med']                   
         self.Mass[self.Mass<=0.]=np.nan 
         self.AV=self.data['Av_V14']
         self.SpT=self.data['spt_V14']    
@@ -187,13 +202,15 @@ class USco:
     
     
     mass_type = 0 source paper mass
-                1 MESA with individual extinction: from J, iPS1 or H
-                2 Baraffe+98 wmixed with individual extinction: from J, iPS1 or H
-    LAST UPDATE: 
+                1 MESA with individual extinction: from Ks if diskless, J otherwise
+                2 Baraffe+98 with individual extinction: from Ks if diskless, J otherwise
+                3 Baraffe+15 with individual extinction: from Ks if diskless, J otherwise
+    LAST UPDATE:
+        2nd December 2020 - Added Baraffe+15 masses
         16 June 2020 - Updated RA,Dec from hms/dms to deg
                 
     """
-    def __init__(self,filename='USco_P_M_updated_16_Jun_2020.fit',datadir='tables/',mass_type=1):
+    def __init__(self,filename='USco_P_M_updated_02_Dec_2020.fit',datadir='tables/',mass_type=1):
         print('Reference table is 1. Rebull et al. 2018')
         self.data=Table.read(datadir+filename, format='fits') 
         print('Loading data,RA,Dec,Prot,Mass,EBV,Disk')
@@ -206,7 +223,9 @@ class USco:
         elif mass_type==1:
             self.Mass=self.data['Mass_MESA']
         elif mass_type==2:
-            self.Mass=self.data['Mass_B98']      
+            self.Mass=self.data['Mass_B98']    
+        elif mass_type==3:
+            self.Mass=self.data['Mass_B15']                
         self.Mass[self.Mass<=0.]=np.nan 
         self.EBV=self.data['E_B-V']
         self.Disk=self.data['Disked']
@@ -265,12 +284,12 @@ class NGC2362:
     LAST UPDATE: 16 June 2020
                 
     """
-    def __init__(self,filename='NGC2362_P_M_updated_16_Jun_2020.fit',datadir='tables/',mass_type=0):
+    def __init__(self,filename='NGC2362_P_M_updated_16_Jun_2020.fit',datadir='/Users/jroquette/work/prog/python/StellarSpinRatesAreAWESoME/tables/',mass_type=0):
         print('Reference table is 1. Irwin et al. 2008')
         self.data=Table.read(datadir+filename, format='fits') 
         print('Loading data,RA,Dec,Prot,Mass,Amp,Disk')
         self.RA=self.data['RAJ2000_1']
-        self.Dec=self.data['DEJ2000_2']
+        self.Dec=self.data['DEJ2000_1']
         self.Prot=self.data['Per']
         self.Amp=self.data['iamp']
         if mass_type==0:
@@ -349,7 +368,9 @@ class NGC6530:
     from Prisinzano+2019
     For the remaining stars I used Vmag or Imag form the source paper along with median extinction
     
-    LAST UPDATE: 16 13 August 2020
+    LAST UPDATE:
+        2nd December 2020 - Added Baraffe+15 masses
+        16 13 August 2020
                 
     """
        
@@ -357,7 +378,7 @@ class NGC6530:
     """
     Reference table is 
     """
-    def __init__(self,filename='NGC6530_P_M_updated_13_Aug_2020.fit',datadir='tables/',mass_type=0):
+    def __init__(self,filename='NGC6530_P_M_updated_13_Aug_2020.fit',datadir='/Users/jroquette/work/prog/python/StellarSpinRatesAreAWESoME/tables/',mass_type=0):
         print('Reference table is Henderson& Stassun 2012')
         print('Loading data,RA,Dec,Prot,Mass,EBV,Disk')        
         self.data=Table.read(datadir+filename, format='fits') 
@@ -480,5 +501,208 @@ class NGC6530:
     #     ppvi=Table.read(datadir+filename, format='ascii') 
     #     self.M_ppvi=ppvi['M']
     #     self.P_ppvi=ppvi['P']           
-                                              
-                                      
+class Praesepe:
+    """
+    Praesepe database 
+    
+    Reference table is Rebull+17
+    https://cdsarc.unistra.fr/viz-bin/cat/J/ApJ/839/92
+    But the source table will also contain Douglas+17
+    https://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=J/ApJ/842/83/table3
+    Reference for Mass transformations: ask Julia Roquette
+    Usage:
+        Praesepe=SpinRatesAreHere.Praesepe()
+        
+        mass_type = 0 Douglas+14 Masses
+                    1 Ks MESA with median extinction
+                    2 Ks Baraffe+98 with median extinction
+                    3 Ks Baraffe+15 with median extinction                    
+    LAST UPDATE: 30 November 2020
+    """
+    def __init__(self,filename='Praesepe_P_M_updated_02_Dec_2020.fit',datadir='/Users/jroquette/work/prog/python/StellarSpinRatesAreAWESoME/tables/',mass_type=0):
+        print('Loading data,RA,Dec,Prot,Mass')
+        self.data=Table.read(datadir+filename, format='fits') 
+        self.RA=self.data['RAJ2000_R17']
+        self.Dec=self.data['DEJ2000_R17']
+        self.Prot=self.data['PPer_R17']
+        if mass_type==0:
+            print('Using Masses from Douglas et al. 2014')            
+            self.Mass=self.data['Mass_D17'] 
+        elif mass_type==1:
+            print('Using MESA masses with median extinction')
+            self.Mass=self.data['Mass_Ks_Mesa_solar_med'] 
+        elif mass_type==2:
+            print('Using B98 masses with median extinction')
+            self.Mass=self.data['Mass_Ks_B98_solar_med'] 
+        elif mass_type==3:
+            print('Using B15 masses with median extinction')
+            self.Mass=self.data['Mass_Ks_B98_solar_med']             
+        self.Mass[self.Mass<=0.]=np.nan    
+        self.cat= ac.SkyCoord(self.RA,self.Dec, unit="deg")  
+        print('PS1 for PanSTARRs DR2 stacked data')
+        print('OriginalPhotometry for V, Ks, and r_mag data')
+        print('ClusterInfo forgeneral info about the cluster')
+    def OriginalPhotometry(self):
+        self.V=self.data['Vmag_R17']
+        self.Ks=self.data['Ksmag_R17']
+        self.r_mag=self.data['r_mag_D17']
+    def PS1(self):
+        self.g=self.data['gPSFMag']
+        self.g_e=self.data['gPSFMagErr']
+        self.r=self.data['rPSFMag']
+        self.r_e=self.data['rPSFMagErr']
+        self.i=self.data['iPSFMag']
+        self.i_e=self.data['iPSFMagErr']
+        self.z=self.data['zPSFMag']
+        self.z_e=self.data['zPSFMagErr']
+        self.y=self.data['yPSFMag']
+        self.y_e=self.data['yPSFMagErr']  
+    def ClusterInfo(self,datadir='tables/'):
+        cluster_info=MacOSFile.pickle_load(datadir+'Praesepe_ClusterInfo.npy')
+        print('Distance from Gaia DR2 -',cluster_info['Gaia_distance_ref'])
+        self.dist=cluster_info['Gaia_distance']
+        self.DM=cluster_info['DM']
+        print(self.dist,' pc, DM= ',self.DM)        
+        print('Median E(B-V) from Gaia DR2 HR diagram paper')
+        print(cluster_info['comment_AV'])
+        self.EBV=cluster_info['E(B-V)']
+        print(self.EBV)
+        self.Rv=3.1
+        self.Av=self.Rv*self.EBV
+        print('Rv=',self.Rv,' Av=',self.Av)
+        print('Age from Gaia DR2 HR diagra paper')
+        self.Age=cluster_info['Age']
+        print(cluster_info['FeH_ref'])
+        self.FeH=cluster_info['FeH']
+        print(self.FeH)                                             
+class Pleiades:
+    """
+    Pleiades database 
+    
+    Reference table is Rebull+16
+    https://vizier.u-strasbg.fr/viz-bin/VizieR-3?-source=J/AJ/152/113/table2
+    Reference for Mass transformations: ask Julia Roquette
+    Usage:
+        Pleiades=SpinRatesAreHere.Pleiades()
+        
+        mass_type = 
+                    1 Ks MESA with median extinction
+                    2 Ks Baraffe+98 with median extinction
+                    3 Ks Baraffe+15 with median extinction
+    LAST UPDATE: 1st December 2020
+    """
+    def __init__(self,filename='Pleiades_P_M_updated_02_Dec_2020.fit',datadir='/Users/jroquette/work/prog/python/StellarSpinRatesAreAWESoME/tables/',mass_type=1):
+        print('Loading data,RA,Dec,Prot,Mass,Amp')
+        self.data=Table.read(datadir+filename, format='fits') 
+        self.RA=self.data['RAJ2000_R17']
+        self.Dec=self.data['DEJ2000_R17']
+        self.Prot=self.data['Prot_R17']
+        self.Amp=self.data['Amp_R17']
+        if mass_type==1:
+            print('Using MESA masses with median extinction')
+            self.Mass=self.data['Mass_Ks_Mesa_solar_med'] 
+        elif mass_type==2:
+            print('Using B98 masses with median extinction')
+            self.Mass=self.data['Mass_Ks_B98_solar_med'] 
+        elif mass_type==3:
+            print('Using B15 masses with median extinction')
+            self.Mass=self.data['Mass_Ks_B15_solar_med'] 
+        self.Mass[self.Mass<=0.]=np.nan    
+        self.cat= ac.SkyCoord(self.RA,self.Dec, unit="deg")  
+        print('PS1 for PanSTARRs DR2 stacked data')
+        print('OriginalPhotometry for V, Ks')
+        print('ClusterInfo forgeneral info about the cluster')
+    def OriginalPhotometry(self):
+        self.V=self.data['Vmag_R17']
+        self.Ks=self.data['Ksmag_R17']
+        self.V_Ks0=self.data['__V-K_0_R17']
+    def PS1(self):
+        self.g=self.data['gPSFMag']
+        self.g_e=self.data['gPSFMagErr']
+        self.r=self.data['rPSFMag']
+        self.r_e=self.data['rPSFMagErr']
+        self.i=self.data['iPSFMag']
+        self.i_e=self.data['iPSFMagErr']
+        self.z=self.data['zPSFMag']
+        self.z_e=self.data['zPSFMagErr']
+        self.y=self.data['yPSFMag']
+        self.y_e=self.data['yPSFMagErr']  
+    def ClusterInfo(self,datadir='tables/'):
+        cluster_info=MacOSFile.pickle_load(datadir+'Pleiades_ClusterInfo.npy')
+        print('Distance from Gaia DR2 -',cluster_info['Gaia_distance_ref'])
+        self.dist=cluster_info['Gaia_distance']
+        self.DM=cluster_info['DM']
+        print(self.dist,' pc, DM= ',self.DM)        
+        print('Median E(B-V) from Gaia DR2 HR diagram paper')
+        print(cluster_info['comment_EBV'])
+        self.EBV=cluster_info['E(B-V)']
+        print(self.EBV)
+        self.Rv=3.1
+        self.Av=self.Rv*self.EBV
+        print('Rv=',self.Rv,' Av=',self.Av)
+        print('Age from Gaia DR2 HR diagra paper')
+        self.Age=cluster_info['Age']
+        print(cluster_info['FeH_ref'])
+        self.FeH=cluster_info['FeH']
+        print(self.FeH)                                             
+                                
+class NGC6811:
+    """
+    NGC6811 database 
+    
+    Reference table is Curtis+19 
+    https://iopscience.iop.org/article/10.3847/1538-4357/ab2393/pdf
+    But also available in Meibom+11
+
+    Reference for Mass transformations: ask Julia Roquette
+    Usage:
+        NGC6811=SpinRatesAreHere.NGC6811()
+        
+        mass_type = 0 Curtis+19 Masses
+                    1 G MESA with median extinction
+                    3 G Baraffe+15 with median extinction
+    LAST UPDATE: 1st December 2020
+    """
+    def __init__(self,filename='NGC6811_P_M_updated_02_Dec_2020.fit',datadir='/Users/jroquette/work/prog/python/StellarSpinRatesAreAWESoME/tables/',mass_type=0):
+        print('Loading data,RA,Dec,Prot,Mass,Amp')
+        self.data=Table.read(datadir+filename, format='fits') 
+        self.RA=self.data['ra_C19']
+        self.Dec=self.data['dec_C19']
+        self.Prot=self.data['Per_C19']
+        if mass_type==0:
+            print('Using Masses from Curtis et al. 2019')            
+            self.Mass=self.data['Mass_C19'] 
+        elif mass_type==1:
+            print('Using MESA masses with median extinction')
+            self.Mass=self.data['Mass_Gaia_Mesa_solar_med'] 
+        elif mass_type==3:
+            print('Using B15 masses with median extinction')
+            self.Mass=self.data['Mass_Gaia_B15_solar_med'] 
+        self.Mass[self.Mass<=0.]=np.nan
+        self.Teff=self.data['Teff_C19']
+        self.SpT=self.data['SpT_C19']
+        self.cat= ac.SkyCoord(self.RA,self.Dec, unit="deg")  
+        print('OriginalPhotometry from Gaia DR2')
+        print('ClusterInfo forgeneral info about the cluster')
+    def OriginalPhotometry(self):
+        self.G_G=self.data['Gmag_C19']
+        self.G_BP_RP=self.data['BP_RP_C19']
+    def ClusterInfo(self,datadir='tables/'):
+        cluster_info=MacOSFile.pickle_load(datadir+'NGC6811_ClusterInfo.npy')
+        print('Distance from Gaia DR2 -',cluster_info['Gaia_distance_ref'])
+        self.dist=cluster_info['Gaia_distance']
+        self.DM=cluster_info['DM']
+        print(self.dist,' pc, DM= ',self.DM)        
+        print('Median E(B-V) from Gaia DR2 HR diagram paper')
+        print(cluster_info['comment_EBV'])
+        self.EBV=cluster_info['E(B-V)']
+        print(self.EBV)
+        self.Rv=3.1
+        self.Av=self.Rv*self.EBV
+        print('Rv=',self.Rv,' Av=',self.Av)
+        print('Age from Gaia DR2 HR diagra paper')
+        self.Age=cluster_info['Age']
+        print(cluster_info['FeH_ref'])
+        self.FeH=cluster_info['FeH']
+        print(self.FeH)                                             
+                                            
