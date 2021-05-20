@@ -18,6 +18,12 @@ This initial version contains datasets for the following clusters:
 
 - hPer
 
+- Pleiades
+
+- Praesepe
+
+- NGC6811
+
 I will soon include the following other clusters (tables and literature review are ready, just need formating):
 
 
