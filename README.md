@@ -58,7 +58,7 @@ You can load the data for a cluster by doing:
 
 The keyword `mass_type` can be set as: `0` for the masses in the source paper, `1` for mass estimations using MESA and `2` for mass estimations using Baraffe et al. 98.
 
-The table with the full dataset can be found in `ngc3364.data`.
+The table with the full dataset can be found in `ngc2264.data`.
 
 `Disk` will give you a flag say if the star has disk or not.
 
